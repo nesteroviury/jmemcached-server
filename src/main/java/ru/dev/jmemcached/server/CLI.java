@@ -15,6 +15,7 @@ public class CLI {
     private static final List<String> QUIT_CMDS = Collections.unmodifiableList(Arrays.asList("q", "quit", "exit"));
 
     public static void main(String[] args) {
+        Thread.currentThread().setName("CLI-main thread");
         try {
             Server server = JmemcachedServerFactory.buildNewServer(null);
             server.start();

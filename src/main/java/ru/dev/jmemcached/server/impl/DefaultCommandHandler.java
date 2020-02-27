@@ -5,13 +5,14 @@ import ru.dev.jmemcached.common.protocol.model.Request;
 import ru.dev.jmemcached.common.protocol.model.Response;
 import ru.dev.jmemcached.common.protocol.model.Status;
 import ru.dev.jmemcached.server.CommandHandler;
+import ru.dev.jmemcached.server.ServerConfig;
 import ru.dev.jmemcached.server.Storage;
 
 class DefaultCommandHandler implements CommandHandler {
     private final Storage storage;
 
-    DefaultCommandHandler(Storage storage) {
-        this.storage = storage;
+    DefaultCommandHandler(ServerConfig serverConfig) {
+        this.storage = serverConfig.getStorage();
     }
 
     @Override

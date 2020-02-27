@@ -45,12 +45,12 @@ class DefaultServerConfig implements ServerConfig {
             }
             applicationProperties.load(inputStream);
         } catch (IOException e) {
-            throw new JMemcachedConfigException("Can,t load application properties from classpath: ", e);
+            throw new JMemcachedConfigException("Can't load application properties from classpath: ", e);
         }
     }
 
     protected CommandHandler createCommandHandler() {
-        return new DefaultCommandHandler(storage);
+        return new DefaultCommandHandler(this);
     }
 
     protected Storage createStorage() {
@@ -160,7 +160,7 @@ class DefaultServerConfig implements ServerConfig {
 
     @Override
     public String toString() {
-        return String.format("DefaultServerConfig: port=%s, initThreadCount=%s, maxThreadCount=%s, clearDataInterval=%s ms",
+        return String.format("DefaultServerConfig: port=%s, initThreadCount=%s, maxThreadCount=%s, clearDataIntervalInMs=%s ms",
                 getServerPort(), getInitThreadCount(), getMaxThreadCount(), getClearDataIntervalInMs());
     }
 }

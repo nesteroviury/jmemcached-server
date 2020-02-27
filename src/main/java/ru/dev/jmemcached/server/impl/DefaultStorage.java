@@ -25,11 +25,11 @@ class DefaultStorage implements Storage {
     }
 
     protected Map<String, StorageItem> createMap() {
-        return new ConcurrentHashMap<String, StorageItem>();
+        return new ConcurrentHashMap<>();
     }
 
     protected ExecutorService createClearExpiredDataExecutorService() {
-        return Executors.newSingleThreadExecutor();
+        return Executors.newSingleThreadExecutor(createClearExpiredDataThreadFactory());
     }
 
     protected ThreadFactory createClearExpiredDataThreadFactory() {
@@ -107,7 +107,7 @@ class DefaultStorage implements Storage {
             this.clearDataIntervalInMs = clearDataIntervalInMs;
         }
 
-        protected boolean isStopRun() {
+        protected boolean interrupted() {
             return Thread.interrupted();
         }
 
@@ -117,8 +117,8 @@ class DefaultStorage implements Storage {
 
         @Override
         public void run() {
-            LOGGER.debug("clearExpiredDataJodThread started with interval () ms", clearDataIntervalInMs);
-            while (isStopRun()) {
+            LOGGER.debug("clearExpiredDataJodThread started with interval {} ms", clearDataIntervalInMs);
+            while (!interrupted()) {
                 LOGGER.trace("Invoke clear job");
                 for (Map.Entry<String, StorageItem> entry : map.entrySet()) {
                     if (entry.getValue().isExpired()) {

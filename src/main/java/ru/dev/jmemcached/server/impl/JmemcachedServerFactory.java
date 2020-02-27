@@ -5,7 +5,7 @@ import ru.dev.jmemcached.server.Server;
 import java.util.Properties;
 
 public class JmemcachedServerFactory {
-    public static Server buildNewServer(Properties overrideApplicationProperties){
-        return null;
+    public static Server buildNewServer(Properties overrideApplicationProperties) {
+        return new DefaultServer(new DefaultServerConfig(overrideApplicationProperties));
     }
 }
