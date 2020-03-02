@@ -45,7 +45,7 @@ class DefaultServerConfig implements ServerConfig {
             }
             applicationProperties.load(inputStream);
         } catch (IOException e) {
-            throw new JMemcachedConfigException("Can't load application properties from classpath: ", e);
+            throw new JMemcachedConfigException("Can't load application properties from classpath: " + classPathResource, e);
         }
     }
 
@@ -82,7 +82,7 @@ class DefaultServerConfig implements ServerConfig {
 
             @Override
             public Thread newThread(Runnable runnable) {
-                Thread thread = new Thread("Worker " + threadCount);
+                Thread thread = new Thread("Worker-" + threadCount);
                 threadCount++;
                 thread.setDaemon(true);
                 return thread;
@@ -128,7 +128,7 @@ class DefaultServerConfig implements ServerConfig {
 
     @Override
     public Storage getStorage() {
-        return null;
+        return storage;
     }
 
     @Override
@@ -154,7 +154,7 @@ class DefaultServerConfig implements ServerConfig {
             }
             return threadCount;
         } catch (NumberFormatException e) {
-            throw new JMemcachedConfigException(propertyName + "should be a number", e);
+            throw new JMemcachedConfigException(propertyName + " should be a number", e);
         }
     }
 

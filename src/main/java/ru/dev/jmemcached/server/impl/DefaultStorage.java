@@ -7,6 +7,7 @@ import ru.dev.jmemcached.server.ServerConfig;
 import ru.dev.jmemcached.server.Storage;
 
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.*;
 
@@ -59,7 +60,7 @@ class DefaultStorage implements Storage {
     @Override
     public Status remove(String key) {
         StorageItem item = map.remove(key);
-        return item != null && item.isExpired() ? Status.REMOVED : Status.NOT_FOUND;
+        return item != null && !item.isExpired() ? Status.REMOVED : Status.NOT_FOUND;
     }
 
     @Override
@@ -90,11 +91,16 @@ class DefaultStorage implements Storage {
 
         @Override
         public String toString() {
-            return "StorageItem{" +
-                    "key='" + key + '\'' +
-                    ", data=" + Arrays.toString(data) +
-                    ", ttl=" + ttl +
-                    '}';
+            final StringBuilder sb = new StringBuilder("[").append(key).append("]=");
+            if (data == null) {
+                sb.append("null");
+            } else {
+                sb.append(data.length).append(" bytes");
+            }
+            if (ttl != null) {
+                sb.append(" (").append(new Date(this.ttl.longValue())).append(')');
+            }
+            return sb.toString();
         }
     }
 

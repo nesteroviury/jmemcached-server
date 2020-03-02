@@ -26,7 +26,7 @@ class DefaultServer implements Server {
         this.mainServerThread = createMainServerThread(createServerRunnable());
     }
 
-    protected Runnable createServerRunnable() {
+    protected Runnable createServerRunnable(){
         return new Runnable() {
             @Override
             public void run() {
@@ -37,14 +37,14 @@ class DefaultServer implements Server {
                             executorService.submit(serverConfig.buildNewClientSocketHandler(clientSocket));
                             LOGGER.info("A new client connection established: " + clientSocket.getRemoteSocketAddress().toString());
                         } catch (RejectedExecutionException e) {
-                            LOGGER.error("All worker threads are busy: reject a new connection: " + e.getMessage());
+                            LOGGER.error("All worker threads are busy. A new connection rejected: " + e.getMessage());
                             clientSocket.close();
                         }
                     } catch (IOException e) {
-                        if (!serverSocket.isClosed()) {
+                        if(!serverSocket.isClosed()) {
                             LOGGER.error("Can't accept client socket: " + e.getMessage(), e);
                         }
-                        destroyJMemcahcedServer();
+                        destroyJMemcachedServer();
                         break;
                     }
                 }
@@ -52,19 +52,19 @@ class DefaultServer implements Server {
         };
     }
 
-    protected void destroyJMemcahcedServer() {
+    protected void destroyJMemcachedServer() {
         try {
             serverConfig.close();
         } catch (Throwable throwable) {
             LOGGER.error("Close serverConfig failed: " + throwable.getMessage(), throwable);
         }
         executorService.shutdownNow();
-        LOGGER.info("Sever stopped");
+        LOGGER.info("Server stopped");
         serverStopped = true;
     }
 
     protected Thread createMainServerThread(Runnable runnable) {
-        Thread thread = new Thread(runnable, "Main server thread");
+        Thread thread = new Thread(runnable, "Main Server Thread");
         thread.setPriority(Thread.MAX_PRIORITY);
         thread.setDaemon(false);
         return thread;
@@ -114,7 +114,7 @@ class DefaultServer implements Server {
             @Override
             public void run() {
                 if (!serverStopped) {
-                    destroyJMemcahcedServer();
+                    destroyJMemcachedServer();
                 }
             }
         }, "ShutdownHook");

@@ -22,7 +22,7 @@ import static org.mockito.Mockito.verify;
 
 public class DefaultServerConfigTest extends AbstractDefaultServerConfigTest {
     @Rule
-    ExpectedException exception = ExpectedException.none();
+    public ExpectedException exception = ExpectedException.none();
     private DefaultServerConfig defaultServerConfig;
 
     @Before

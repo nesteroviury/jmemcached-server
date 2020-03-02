@@ -50,6 +50,6 @@ public class StorageItemTest {
     public void toStringWithTTL() {
         storageItem = new DefaultStorage.StorageItem("key", -System.currentTimeMillis(), null);
 
-        assertEquals("[key]=null (Thu Jan 01 02:00:00 EET 1970)", storageItem.toString());
+        assertEquals("[key]=null (Thu Jan 01 03:00:00 MSK 1970)", storageItem.toString());
     }
 }

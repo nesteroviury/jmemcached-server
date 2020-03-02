@@ -1,5 +1,6 @@
 package ru.dev.jmemcached.server.impl;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.Logger;
 import ru.dev.jmemcached.TestUtils;
@@ -18,6 +19,7 @@ public class ClearExpiredDataJodTest {
     private Iterator<Map.Entry<String, DefaultStorage.StorageItem>> iterator;
     private int clearDataIntervalInMs = 10000;
 
+    @Before
     public void before() throws IllegalAccessException {
         logger = mock(Logger.class);
         map = mock(Map.class);

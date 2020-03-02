@@ -3,7 +3,9 @@ package ru.dev.jmemcached.server.impl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.theories.DataPoints;
+import org.junit.experimental.theories.Theories;
 import org.junit.experimental.theories.Theory;
+import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import ru.dev.jmemcached.TestUtils;
 import ru.dev.jmemcached.common.protocol.RequestConverter;
@@ -25,6 +27,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
+@RunWith(Theories.class)
 public class DefaultClientSocketHandlerTest {
     private Logger logger;
     private Socket socket;
@@ -134,7 +137,7 @@ public class DefaultClientSocketHandlerTest {
 
         defaultClientSocketHandler.run();
 
-        verify(logger).info("Remote client connection closed: localhost:  EOFException");
+        verify(logger).info("Remote client connection closed: localhost: EOFException");
     }
 
     @Test
@@ -143,7 +146,7 @@ public class DefaultClientSocketHandlerTest {
 
         defaultClientSocketHandler.run();
 
-        verify(logger).info("Remote client connection closed: localhost:  SocketException");
+        verify(logger).info("Remote client connection closed: localhost: SocketException");
     }
 
     @Test

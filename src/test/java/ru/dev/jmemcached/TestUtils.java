@@ -1,6 +1,6 @@
 package ru.dev.jmemcached;
 
-import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.slf4j.Logger;
 
 import java.lang.reflect.Field;

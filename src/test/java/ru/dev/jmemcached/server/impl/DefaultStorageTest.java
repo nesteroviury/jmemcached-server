@@ -1,6 +1,6 @@
 package ru.dev.jmemcached.server.impl;
 
-import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 import org.junit.Before;
 import org.junit.Test;
 import ru.dev.jmemcached.common.protocol.model.Status;
@@ -14,19 +14,19 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class DefaultStorageTest {
-    private ExecutorService executorService;
+    private ExecutorService executorServiceMock;
     private ServerConfig serverConfig;
     private DefaultStorage defaultStorage;
 
     @Before
     public void before() {
-        executorService = mock(ExecutorService.class);
+        executorServiceMock = mock(ExecutorService.class);
         serverConfig = mock(ServerConfig.class);
         when(serverConfig.getClearDataIntervalInMs()).thenReturn(10);
         defaultStorage = new DefaultStorage(serverConfig) {
             @Override
             protected ExecutorService createClearExpiredDataExecutorService() {
-                return executorService;
+                return executorServiceMock;
             }
         };
         defaultStorage.put("test", TimeUnit.SECONDS.toMillis(1), new byte[]{5, 6, 7});
@@ -34,18 +34,18 @@ public class DefaultStorageTest {
 
     @Test
     public void startClearExpiredDataExecutorService() throws IllegalAccessException {
-        Runnable clearExpiredDataJob = (Runnable) FieldUtils.getDeclaredField(DefaultStorage.class,
-                "clearExpiredDataJob", true).get(defaultStorage);
+        Runnable clearExpiredDataJod = (Runnable) FieldUtils.getDeclaredField(DefaultStorage.class,
+                "clearExpiredDataJod", true).get(defaultStorage);
 
-        verify(executorService).submit(clearExpiredDataJob);
+        verify(executorServiceMock).submit(clearExpiredDataJod);
     }
 
     @Test
     public void close() throws Exception {
         defaultStorage.close();
 
-        verify(executorService, never()).shutdown();
-        verify(executorService, never()).shutdownNow();
+        verify(executorServiceMock, never()).shutdown();
+        verify(executorServiceMock, never()).shutdownNow();
     }
 
     @Test
