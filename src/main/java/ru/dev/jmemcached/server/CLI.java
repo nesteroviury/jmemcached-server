@@ -21,7 +21,7 @@ public class CLI {
             server.start();
             waitForStopCommand(server);
         } catch (Throwable throwable) {
-            LOGGER.error("Can't execute cmd: " + throwable.getMessage(), throwable);
+            LOGGER.error("Can't execute command: " + throwable.getMessage(), throwable);
         }
     }
 
