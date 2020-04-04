@@ -34,14 +34,11 @@ class DefaultStorage implements Storage {
     }
 
     protected ThreadFactory createClearExpiredDataThreadFactory() {
-        return new ThreadFactory() {
-            @Override
-            public Thread newThread(Runnable runnable) {
-                Thread clearExpiredDataJodThread = new Thread(runnable, "clearExpiredDataJodThread");
-                clearExpiredDataJodThread.setPriority(Thread.MIN_PRIORITY);
-                clearExpiredDataJodThread.setDaemon(true);
-                return clearExpiredDataJodThread;
-            }
+        return runnable -> {
+            Thread clearExpiredDataJodThread = new Thread(runnable, "clearExpiredDataJodThread");
+            clearExpiredDataJodThread.setPriority(Thread.MIN_PRIORITY);
+            clearExpiredDataJodThread.setDaemon(true);
+            return clearExpiredDataJodThread;
         };
     }
 
