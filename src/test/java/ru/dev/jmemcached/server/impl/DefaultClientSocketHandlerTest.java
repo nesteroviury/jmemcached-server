@@ -100,16 +100,15 @@ public class DefaultClientSocketHandlerTest {
 
     @DataPoints
     public static Object[][] testDataForRunWithExceptionsMethod = new Object[][]{
-            {new RuntimeException("Test"), 2},
-            {new EOFException("Test"), 1},
-            {new SocketException("Test"), 1},
-            {new IOException("Test"), 1}
+            {new RuntimeException("Test")},
+            {new EOFException("Test")},
+            {new SocketException("Test")},
+            {new IOException("Test")}
     };
 
     @Theory
     public void runWithExceptions(final Object... testData) throws IOException {
         Exception exception = (Exception) testData[0];
-        int interruptedMethodCallCount = (int) testData[1];
         when(requestConverter.readRequest(inputStream)).thenThrow(exception);
 
         defaultClientSocketHandler.run();
@@ -118,7 +117,7 @@ public class DefaultClientSocketHandlerTest {
         verify(requestConverter).readRequest(inputStream);
         verify(commandHandler, never()).handle(request);
         verify(responseConverter, never()).writeResponse(outputStream, response);
-        verify(defaultClientSocketHandler, times(interruptedMethodCallCount)).interrupted();
+        verify(defaultClientSocketHandler).interrupted();
     }
 
     @Test

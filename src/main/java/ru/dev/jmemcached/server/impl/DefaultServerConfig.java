@@ -82,7 +82,7 @@ class DefaultServerConfig implements ServerConfig {
 
             @Override
             public Thread newThread(Runnable runnable) {
-                Thread thread = new Thread("Worker-" + threadCount);
+                Thread thread = new Thread(runnable, "Worker-" + threadCount);
                 threadCount++;
                 thread.setDaemon(true);
                 return thread;

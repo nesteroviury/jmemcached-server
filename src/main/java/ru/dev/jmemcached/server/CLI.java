@@ -29,11 +29,11 @@ public class CLI {
         try (Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8.name())) {
             while (true) {
                 String cmd = scanner.nextLine();
-                if (QUIT_CMDS.contains(cmd)) {
+                if (QUIT_CMDS.contains(cmd.toLowerCase())) {
                     server.stop();
                     break;
                 } else {
-                    LOGGER.error("undefined command: " + cmd + "! To shutdown server please type: q");
+                    LOGGER.error("Undefined command: " + cmd + "! To shutdown server please type: q");
                 }
             }
         }

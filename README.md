@@ -13,7 +13,7 @@
     <li>Скопировать {projectDir}/service/prunsrv.exe -> HOME/bin/</li>
     <li>Скопировать {projectDir}/service/installService.bat  -> HOME/scripts/</li>
     <li>Скопировать {projectDir}/service/uninstallService.bat  -> HOME/scripts</li>
-    <li>Скопировать {projectDir}/target/jmemcached-server-production-1.0-SNAPSHOT.jar -> HOME/</li>
+    <li>Скопировать {projectDir}/target/jmemcached-server-production-${project.version}.jar -> HOME/</li>
     <li>Запустить cmd под Администратором, перейти в HOME</li>
     <li>Выполнить .\installService.bat</li>
     <li>Перейти в оснастку services.msc, запустить сервис</li>

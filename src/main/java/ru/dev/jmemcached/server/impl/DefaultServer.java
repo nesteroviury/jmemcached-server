@@ -26,27 +26,24 @@ class DefaultServer implements Server {
         this.mainServerThread = createMainServerThread(createServerRunnable());
     }
 
-    protected Runnable createServerRunnable(){
-        return new Runnable() {
-            @Override
-            public void run() {
-                while (!mainServerThread.isInterrupted()) {
+    protected Runnable createServerRunnable() {
+        return () -> {
+            while (!mainServerThread.isInterrupted()) {
+                try {
+                    Socket clientSocket = serverSocket.accept();
                     try {
-                        Socket clientSocket = serverSocket.accept();
-                        try {
-                            executorService.submit(serverConfig.buildNewClientSocketHandler(clientSocket));
-                            LOGGER.info("A new client connection established: " + clientSocket.getRemoteSocketAddress().toString());
-                        } catch (RejectedExecutionException e) {
-                            LOGGER.error("All worker threads are busy. A new connection rejected: " + e.getMessage());
-                            clientSocket.close();
-                        }
-                    } catch (IOException e) {
-                        if(!serverSocket.isClosed()) {
-                            LOGGER.error("Can't accept client socket: " + e.getMessage(), e);
-                        }
-                        destroyJMemcachedServer();
-                        break;
+                        executorService.submit(serverConfig.buildNewClientSocketHandler(clientSocket));
+                        LOGGER.info("A new client connection established: " + clientSocket.getRemoteSocketAddress().toString());
+                    } catch (RejectedExecutionException e) {
+                        LOGGER.error("All worker threads are busy. A new connection rejected: " + e.getMessage());
+                        clientSocket.close();
                     }
+                } catch (IOException e) {
+                    if (!serverSocket.isClosed()) {
+                        LOGGER.error("Can't accept client socket: " + e.getMessage(), e);
+                    }
+                    destroyJMemcachedServer();
+                    break;
                 }
             }
         };
@@ -75,7 +72,7 @@ class DefaultServer implements Server {
         int initThreadCount = serverConfig.getInitThreadCount();
         int maxThreadCount = serverConfig.getMaxThreadCount();
         return new ThreadPoolExecutor(initThreadCount, maxThreadCount, 60L, TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>(), threadFactory, new ThreadPoolExecutor.AbortPolicy());
+                new SynchronousQueue<>(), threadFactory, new ThreadPoolExecutor.AbortPolicy());
     }
 
     protected ServerSocket createServerSocket() {
@@ -110,12 +107,9 @@ class DefaultServer implements Server {
     }
 
     protected Thread getShutdownHook() {
-        return new Thread(new Runnable() {
-            @Override
-            public void run() {
-                if (!serverStopped) {
-                    destroyJMemcachedServer();
-                }
+        return new Thread(() -> {
+            if (!serverStopped) {
+                destroyJMemcachedServer();
             }
         }, "ShutdownHook");
     }
