@@ -39,7 +39,7 @@
 
         <!--dependencies-->
         <mockito.version>2.6.3</mockito.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <logback.version>1.1.8</logback.version>
         <apache.commons.lang.version>3.5</apache.commons.lang.version>
         <jmemcached.common.version>0.0.1</jmemcached.common.version>
